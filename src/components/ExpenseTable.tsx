@@ -8,8 +8,20 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { type Expense } from "./ExpenseTracker";
 
-export default function ExpenseTable() {
+interface ExpenseTableProps {
+   expenses: Expense[];
+}
+
+function formatCurrency(value: number) {
+   return new Intl.NumberFormat("en", {
+      style: "currency",
+      currency: "USD",
+   }).format(value);
+}
+
+export default function ExpenseTable({ expenses }: ExpenseTableProps) {
    return (
       <Card>
          <CardHeader>
@@ -27,15 +39,19 @@ export default function ExpenseTable() {
                   </TableRow>
                </TableHeader>
                <TableBody>
-                  <TableRow>
-                     <TableCell>Pizza order</TableCell>
-                     <TableCell>$12.00</TableCell>
-                     <TableCell>Food</TableCell>
-                     <TableCell className="text-nowrap">2024-11-12</TableCell>
-                     <TableCell>
-                        <Button variant="destructive">Delete</Button>
-                     </TableCell>
-                  </TableRow>
+                  {expenses.map((expense: Expense) => (
+                     <TableRow key={expense.id}>
+                        <TableCell>{expense.description}</TableCell>
+                        <TableCell>{formatCurrency(expense.amount)}</TableCell>
+                        <TableCell>{expense.category}</TableCell>
+                        <TableCell className="text-nowrap">
+                           {expense.date}
+                        </TableCell>
+                        <TableCell>
+                           <Button variant="destructive">Delete</Button>
+                        </TableCell>
+                     </TableRow>
+                  ))}
                </TableBody>
             </Table>
          </CardContent>
