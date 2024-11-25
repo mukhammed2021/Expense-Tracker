@@ -51,7 +51,7 @@ export default function ExpenseSummary() {
          </CardHeader>
          <CardContent>
             <p className="mb-4 text-2xl font-bold">
-               Total Expenses: {expenseSummary}
+               Total Expenses: {formatCurrency(expenseSummary)}
             </p>
             <p className="mb-2 text-xl font-semibold">Expenses by Category:</p>
             <ul>
