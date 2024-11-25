@@ -8,11 +8,7 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { type Expense } from "./ExpenseTracker";
-
-interface ExpenseTableProps {
-   expenses: Expense[];
-}
+import { useExpenses } from "@/context/ExpensesContext";
 
 function formatCurrency(value: number) {
    return new Intl.NumberFormat("en", {
@@ -21,7 +17,9 @@ function formatCurrency(value: number) {
    }).format(value);
 }
 
-export default function ExpenseTable({ expenses }: ExpenseTableProps) {
+export default function ExpenseTable() {
+   const { expenses } = useExpenses();
+
    return (
       <Card>
          <CardHeader>
@@ -39,7 +37,7 @@ export default function ExpenseTable({ expenses }: ExpenseTableProps) {
                   </TableRow>
                </TableHeader>
                <TableBody>
-                  {expenses.map((expense: Expense) => (
+                  {expenses.map((expense) => (
                      <TableRow key={expense.id}>
                         <TableCell>{expense.description}</TableCell>
                         <TableCell>{formatCurrency(expense.amount)}</TableCell>

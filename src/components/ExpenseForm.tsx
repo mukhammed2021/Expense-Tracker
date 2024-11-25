@@ -16,19 +16,11 @@ import {
    SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { type ACTIONTYPE } from "./ExpenseTracker";
+import { useExpenses } from "@/context/ExpensesContext";
 
-interface ExpenseFormProps {
-   expense: {
-      description: string;
-      amount: number;
-      category: string;
-      date: string;
-   };
-   dispatch: React.Dispatch<ACTIONTYPE>;
-}
+export default function ExpenseForm() {
+   const { expense, dispatch } = useExpenses();
 
-export default function ExpenseForm({ expense, dispatch }: ExpenseFormProps) {
    const { description, amount, category, date } = expense;
 
    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {

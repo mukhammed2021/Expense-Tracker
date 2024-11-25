@@ -1,9 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { type Expense } from "./ExpenseTracker";
-
-interface ExpenseSummaryProps {
-   expenses: Expense[];
-}
+import { useExpenses } from "@/context/ExpensesContext";
 
 interface CategorySummary {
    id: string;
@@ -18,7 +14,9 @@ function formatCurrency(value: number) {
    }).format(value);
 }
 
-export default function ExpenseSummary({ expenses }: ExpenseSummaryProps) {
+export default function ExpenseSummary() {
+   const { expenses } = useExpenses();
+
    const expenseSummary = expenses.reduce((acc, { amount }) => {
       return acc + Number(amount);
    }, 0);
