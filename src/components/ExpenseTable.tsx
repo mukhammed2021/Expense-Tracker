@@ -18,7 +18,11 @@ function formatCurrency(value: number) {
 }
 
 export default function ExpenseTable() {
-   const { expenses } = useExpenses();
+   const { expenses, dispatch } = useExpenses();
+
+   function handleDeleteClick(id: string) {
+      dispatch({ type: "expense/delete", payload: id });
+   }
 
    return (
       <Card>
@@ -46,7 +50,12 @@ export default function ExpenseTable() {
                            {expense.date}
                         </TableCell>
                         <TableCell>
-                           <Button variant="destructive">Delete</Button>
+                           <Button
+                              variant="destructive"
+                              onClick={() => handleDeleteClick(expense.id)}
+                           >
+                              Delete
+                           </Button>
                         </TableCell>
                      </TableRow>
                   ))}
