@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 
 interface ExpensesProviderProps {
    children: React.ReactNode;
@@ -10,7 +10,7 @@ interface ExpensesContextType {
    dispatch: React.Dispatch<ACTIONTYPE>;
 }
 
-export interface Expense {
+interface Expense {
    id: string;
    description: string;
    amount: number;
@@ -26,7 +26,7 @@ const initialState = {
       category: "",
       date: "",
    },
-   expenses: [] as Expense[],
+   expenses: JSON.parse(localStorage.getItem("expenses") ?? "[]"),
 };
 
 export type ACTIONTYPE =
@@ -34,7 +34,8 @@ export type ACTIONTYPE =
    | { type: "expense/amount"; payload: number }
    | { type: "expense/category"; payload: string }
    | { type: "expense/date"; payload: string }
-   | { type: "expense/add"; payload: Expense };
+   | { type: "expense/add"; payload: Expense }
+   | { type: "expense/delete"; payload: string };
 
 function reducer(state: typeof initialState, action: ACTIONTYPE) {
    switch (action.type) {
@@ -70,6 +71,13 @@ function reducer(state: typeof initialState, action: ACTIONTYPE) {
                date: "",
             },
          };
+      case "expense/delete":
+         return {
+            ...state,
+            expenses: state.expenses.filter(
+               (expense: Expense) => expense.id !== action.payload,
+            ),
+         };
 
       default:
          throw Error("Unknown action type");
@@ -80,6 +88,10 @@ const ExpensesContext = createContext<ExpensesContextType | null>(null);
 
 function ExpensesProvider({ children }: ExpensesProviderProps) {
    const [{ expense, expenses }, dispatch] = useReducer(reducer, initialState);
+
+   useEffect(() => {
+      localStorage.setItem("expenses", JSON.stringify(expenses));
+   }, [expenses]);
 
    return (
       <ExpensesContext.Provider
